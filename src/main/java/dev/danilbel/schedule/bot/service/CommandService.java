@@ -1,5 +1,6 @@
 package dev.danilbel.schedule.bot.service;
 
+import dev.danilbel.schedule.bot.config.BotConfig;
 import dev.danilbel.schedule.bot.enums.Command;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -14,6 +15,8 @@ import java.util.List;
 @Service
 public class CommandService {
 
+    BotConfig botConfig;
+
     public List<BotCommand> getBotCommandList() {
 
         var commands = new ArrayList<BotCommand>();
@@ -25,5 +28,29 @@ public class CommandService {
             );
 
         return commands;
+    }
+
+    public List<String> getAllCommandList() {
+        var commands = new ArrayList<String>();
+
+        for (Command command : Command.values()) {
+            commands.add(command.getCommand());
+            commands.add(getFullCommand(command));
+        }
+
+        return commands;
+    }
+
+    private String getFullCommand(Command command) {
+        return command.getCommand() + "@" + botConfig.getBotUsername();
+    }
+
+    public Command fromCommandName(String commandName) {
+        for (Command command : Command.values()) {
+            if (command.getCommand().equals(commandName) || getFullCommand(command).equals(commandName)) {
+                return command;
+            }
+        }
+        throw new IllegalArgumentException("Invalid value for Command: " + commandName);
     }
 }
