@@ -1,6 +1,7 @@
 package dev.danilbel.schedule.bot;
 
 import dev.danilbel.schedule.bot.config.BotConfig;
+import dev.danilbel.schedule.bot.controller.UpdateController;
 import dev.danilbel.schedule.bot.service.CommandService;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -20,10 +21,13 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     BotConfig config;
 
+    UpdateController updateController;
+
     CommandService commandService;
 
     @PostConstruct
     public void init() {
+        updateController.registerBot(this);
         setCommands();
     }
 
@@ -39,7 +43,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-
+        updateController.processUpdate(update);
     }
 
     private void setCommands() {
