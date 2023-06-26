@@ -21,6 +21,9 @@ public class ParserConfig {
     @Value("${parser.start.semester.week}")
     String startSemesterWeek;
 
+    @Value("${parser.schedule.group.id}")
+    String scheduleGroupId;
+
     public LocalDate getStartSemesterDate() {
         return LocalDate.parse(startSemesterDate);
     }

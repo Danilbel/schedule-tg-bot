@@ -1,5 +1,6 @@
 package dev.danilbel.schedule.parser.service;
 
+import dev.danilbel.schedule.parser.config.ParserConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
@@ -16,9 +17,16 @@ import java.net.URL;
 public class ResponseApiService {
 
     public static final String URL_API_DATETIME = "https://worldtimeapi.org/api/timezone/Europe/Kyiv";
+    public static final String URL_API_SCHEDULE = "https://schedule.kpi.ua/api/schedule/lessons?groupId=";
+
+    ParserConfig parserConfig;
 
     public String getResponseApiDateTime() {
         return getResponse(URL_API_DATETIME);
+    }
+
+    public String getResponseApiSchedule() {
+        return getResponse(URL_API_SCHEDULE + parserConfig.getScheduleGroupId());
     }
 
     private String getResponse(String url) {
