@@ -7,12 +7,6 @@ plugins {
 group = 'dev.danilbel'
 version = '1.0.0'
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
-
 repositories {
     mavenCentral()
 }
@@ -20,6 +14,7 @@ repositories {
 // Spring
 dependencies {
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 }
 
 // Lombok
@@ -28,6 +23,11 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+}
+
+// TgBot
+dependencies {
+    implementation 'org.telegram:telegrambots:6.7.0'
 }
 
 test {
