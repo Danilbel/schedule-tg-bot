@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
 public enum TimeTable {
-    FIRST_PAIR(1, "08.30", "10.05"),
+    FIRST_PAIR(1, "8.30", "10.05"),
     SECOND_PAIR(2, "10.25", "12.00"),
     THIRD_PAIR(3, "12.20", "13.55"),
     FOURTH_PAIR(4, "14.15", "15.50"),
