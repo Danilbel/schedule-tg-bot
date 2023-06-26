@@ -53,4 +53,18 @@ public class CommandService {
         }
         throw new IllegalArgumentException("Invalid value for Command: " + commandName);
     }
+
+    public String commandListToString() {
+
+        var stringBuilder = new StringBuilder();
+
+        for (var command : Command.values()) {
+            stringBuilder.append(command.getCommand())
+                    .append(" – ")
+                    .append(command.getDescription())
+                    .append("\n");
+        }
+
+        return stringBuilder.toString();
+    }
 }
