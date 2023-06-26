@@ -9,10 +9,11 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
 public enum ScheduleWeek {
 
-    FIRST_WEEK("first"),
-    SECOND_WEEK("second");
+    FIRST_WEEK("first", "Перший"),
+    SECOND_WEEK("second", "Другий");
 
     String week;
+    String nameWeek;
 
     public static ScheduleWeek fromValue(String week) {
         for (ScheduleWeek scheduleWeek : ScheduleWeek.values()) {
