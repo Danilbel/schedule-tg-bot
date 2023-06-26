@@ -57,6 +57,7 @@ public class ScheduleParser {
             }
 
             scheduleDay.setPairs(schedulePairList);
+            scheduleDayList.add(scheduleDay);
         }
 
         return scheduleDayList;
