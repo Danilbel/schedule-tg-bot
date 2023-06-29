@@ -49,10 +49,10 @@ public class UpdateController {
             case NEXT -> null;
             case LAST -> null;
             case TIMETABLE -> null;
-            case TODAY -> null;
-            case NEXT_DAY -> null;
-            case CURRENT_WEEK -> null;
-            case NEXT_WEEK -> null;
+            case TODAY -> processCommandService.processCommandToday(update);
+            case NEXT_DAY -> processCommandService.processCommandNextDay(update);
+            case CURRENT_WEEK -> processCommandService.processCommandCurrentWeek(update);
+            case NEXT_WEEK -> processCommandService.processCommandNextWeek(update);
             case HELP -> processCommandService.processCommandHelp(update);
         };
 
