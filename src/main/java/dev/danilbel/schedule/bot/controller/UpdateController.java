@@ -48,7 +48,7 @@ public class UpdateController {
             case CURRENT -> null;
             case NEXT -> null;
             case LAST -> null;
-            case TIMETABLE -> null;
+            case TIMETABLE -> processCommandService.processCommandTimetable(update);
             case TODAY -> processCommandService.processCommandToday(update);
             case NEXT_DAY -> processCommandService.processCommandNextDay(update);
             case CURRENT_WEEK -> processCommandService.processCommandCurrentWeek(update);

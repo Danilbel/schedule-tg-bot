@@ -2,6 +2,7 @@ package dev.danilbel.schedule.bot.service;
 
 import dev.danilbel.schedule.domain.ScheduleDay;
 import dev.danilbel.schedule.domain.ScheduleWeek;
+import dev.danilbel.schedule.domain.TimeTable;
 import dev.danilbel.schedule.domain.WeekDay;
 import dev.danilbel.schedule.parser.service.ScheduleDateTimeParser;
 import dev.danilbel.schedule.parser.service.ScheduleParser;
@@ -23,6 +24,17 @@ public class ProcessCommandService {
 
     ScheduleDateTimeParser scheduleDateTimeParser;
     ScheduleParser scheduleParser;
+
+    public SendMessage processCommandTimetable(Update update) {
+
+        StringBuilder msg = new StringBuilder("<b>Розклад пар:</b>\n\n");
+
+        for (var time : TimeTable.values()) {
+            msg.append(time).append("\n");
+        }
+
+        return messageService.makeSendMessageWithText(update, msg.toString());
+    }
 
     public SendMessage processCommandToday(Update update) {
 
