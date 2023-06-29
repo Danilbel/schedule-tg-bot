@@ -38,4 +38,10 @@ public enum WeekDay {
         }
         throw new IllegalArgumentException("Invalid value for WeekDay: " + nameDay);
     }
+
+    public WeekDay getNextWorkDay() {
+        return this == SATURDAY
+                ? MONDAY
+                : WeekDay.fromValue(numberDay + 1);
+    }
 }

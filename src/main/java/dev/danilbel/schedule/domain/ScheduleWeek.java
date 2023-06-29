@@ -23,4 +23,8 @@ public enum ScheduleWeek {
         }
         throw new IllegalArgumentException("Invalid value for ScheduleWeek: " + week);
     }
+
+    public ScheduleWeek getNextWeek() {
+        return this == FIRST_WEEK ? SECOND_WEEK : FIRST_WEEK;
+    }
 }
