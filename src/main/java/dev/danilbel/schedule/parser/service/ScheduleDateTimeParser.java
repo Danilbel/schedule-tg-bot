@@ -3,7 +3,7 @@ package dev.danilbel.schedule.parser.service;
 import com.google.gson.Gson;
 import dev.danilbel.schedule.domain.ScheduleDateTime;
 import dev.danilbel.schedule.domain.ScheduleWeek;
-import dev.danilbel.schedule.domain.WeekDay;
+import dev.danilbel.schedule.domain.DayOfWeek;
 import dev.danilbel.schedule.parser.config.ParserConfig;
 import dev.danilbel.schedule.parser.response.WorldTimeApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ public class ScheduleDateTimeParser {
                         worldTimeApiResponse.getDateTime()
                 ).toLocalDateTime();
 
-        var weekDay = WeekDay
+        var weekDay = DayOfWeek
                 .fromValue(
                         worldTimeApiResponse.getWeekDay()
                 );

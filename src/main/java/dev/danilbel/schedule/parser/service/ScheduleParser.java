@@ -5,7 +5,7 @@ import dev.danilbel.schedule.domain.ScheduleDay;
 import dev.danilbel.schedule.domain.SchedulePair;
 import dev.danilbel.schedule.domain.ScheduleWeek;
 import dev.danilbel.schedule.domain.TimeTable;
-import dev.danilbel.schedule.domain.WeekDay;
+import dev.danilbel.schedule.domain.DayOfWeek;
 import dev.danilbel.schedule.parser.response.ScheduleApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -39,7 +39,7 @@ public class ScheduleParser {
         for (var scheduleDayResponse : schedule) {
 
             var scheduleDay = ScheduleDay.builder()
-                    .day(WeekDay.fromValue(scheduleDayResponse.getDay())).build();
+                    .day(DayOfWeek.fromValue(scheduleDayResponse.getDay())).build();
 
             var schedulePairList = new ArrayList<SchedulePair>();
 

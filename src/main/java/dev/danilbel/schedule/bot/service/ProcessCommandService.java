@@ -3,7 +3,7 @@ package dev.danilbel.schedule.bot.service;
 import dev.danilbel.schedule.domain.ScheduleDay;
 import dev.danilbel.schedule.domain.ScheduleWeek;
 import dev.danilbel.schedule.domain.TimeTable;
-import dev.danilbel.schedule.domain.WeekDay;
+import dev.danilbel.schedule.domain.DayOfWeek;
 import dev.danilbel.schedule.parser.service.ScheduleDateTimeParser;
 import dev.danilbel.schedule.parser.service.ScheduleParser;
 import lombok.RequiredArgsConstructor;
@@ -72,7 +72,7 @@ public class ProcessCommandService {
                 date.getDayOfMonth(),
                 date.getMonthValue());
 
-        var scheduleWeek = weekDay == WeekDay.MONDAY
+        var scheduleWeek = weekDay == DayOfWeek.MONDAY
                 ? dateTime.getScheduleWeek().getNextWeek()
                 : dateTime.getScheduleWeek();
 
@@ -118,9 +118,9 @@ public class ProcessCommandService {
         var msg = new StringBuilder(String.format("<b>Пари на поточний (%s) тиждень:</b>\n\n",
                 scheduleWeek.getNameWeek().toLowerCase()));
 
-        for (var weekDay : WeekDay.values()) {
+        for (var weekDay : DayOfWeek.values()) {
 
-            if (weekDay == WeekDay.SUNDAY) {
+            if (weekDay == DayOfWeek.SUNDAY) {
                 continue;
             }
 

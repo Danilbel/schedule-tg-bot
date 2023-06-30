@@ -7,7 +7,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
-public enum WeekDay {
+public enum DayOfWeek {
 
     SUNDAY(0, "Нд", "Неділя"),
     MONDAY(1, "Пн", "Понеділок"),
@@ -21,8 +21,8 @@ public enum WeekDay {
     String nameDay;
     String fullNameDay;
 
-    public static WeekDay fromValue(int numberDay) {
-        for (WeekDay day : WeekDay.values()) {
+    public static DayOfWeek fromValue(int numberDay) {
+        for (DayOfWeek day : DayOfWeek.values()) {
             if (day.numberDay == numberDay) {
                 return day;
             }
@@ -30,8 +30,8 @@ public enum WeekDay {
         throw new IllegalArgumentException("Invalid value for WeekDay: " + numberDay);
     }
 
-    public static WeekDay fromValue(String nameDay) {
-        for (WeekDay day : WeekDay.values()) {
+    public static DayOfWeek fromValue(String nameDay) {
+        for (DayOfWeek day : DayOfWeek.values()) {
             if (day.nameDay.equals(nameDay)) {
                 return day;
             }
@@ -39,9 +39,9 @@ public enum WeekDay {
         throw new IllegalArgumentException("Invalid value for WeekDay: " + nameDay);
     }
 
-    public WeekDay getNextWorkDay() {
+    public DayOfWeek getNextWorkDay() {
         return this == SATURDAY
                 ? MONDAY
-                : WeekDay.fromValue(numberDay + 1);
+                : DayOfWeek.fromValue(numberDay + 1);
     }
 }
