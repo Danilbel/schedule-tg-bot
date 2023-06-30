@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Getter
@@ -16,37 +17,40 @@ public class ScheduleDay {
 
     List<SchedulePair> pairs;
 
+    public void sort() {
+        pairs.sort(Comparator.comparing(SchedulePair::getTime));
+    }
+
     @Override
     public String toString() {
-        var stringBuilderDay = new StringBuilder();
 
-        var count = 0;
-        for (var timeTable : TimeTable.values()) {
+        var stringBuilder = new StringBuilder("<b>• ").append(day.getFullNameDay()).append(": </b>");
 
-            var countPair = 0;
-            var stringBuilderPairs = new StringBuilder();
-            for (var pair : pairs) {
-                if (pair.getTime() == timeTable) {
-                    stringBuilderPairs.append('\n').append(pair);
+        if (pairs == null || pairs.isEmpty()) {
 
-                    countPair++;
+            return stringBuilder.append("<i>Пар немає</i>").toString();
+        }
+
+        stringBuilder.append('\n');
+        for (var i = 0; i < pairs.size(); i++) {
+
+            var pair = pairs.get(i);
+
+            if (i == 0) {
+
+                stringBuilder.append(pair.getTime()).append('\n').append(pair);
+            } else {
+
+                var prevPair = pairs.get(i - 1);
+
+                if (prevPair.getTime() != pair.getTime()) {
+                    stringBuilder.append('\n').append(pair.getTime()).append('\n').append(pair);
+                } else {
+                    stringBuilder.append('\n').append(pair);
                 }
             }
-
-            if (countPair > 0) {
-
-                if (count > 0) stringBuilderDay.append('\n');
-
-                stringBuilderDay.append(timeTable).append(stringBuilderPairs);
-
-                count++;
-            }
         }
 
-        if (count == 0) {
-            stringBuilderDay.append("<i>Пар немає</i>");
-        }
-
-        return stringBuilderDay.toString();
+        return stringBuilder.toString();
     }
 }
