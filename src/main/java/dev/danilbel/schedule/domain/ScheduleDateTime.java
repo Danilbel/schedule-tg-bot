@@ -22,7 +22,7 @@ public class ScheduleDateTime {
 
     LocalTime time;
 
-    DayOfWeek weekDay;
+    DayOfWeek dayOfWeek;
 
     NameWeek scheduleWeek;
 }

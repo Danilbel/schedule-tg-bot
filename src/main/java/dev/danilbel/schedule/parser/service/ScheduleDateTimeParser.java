@@ -46,7 +46,7 @@ public class ScheduleDateTimeParser {
         return ScheduleDateTime.builder()
                 .date(currentDateTime.toLocalDate())
                 .time(currentDateTime.toLocalTime())
-                .weekDay(weekDay)
+                .dayOfWeek(weekDay)
                 .scheduleWeek(scheduleWeek)
                 .build();
     }
