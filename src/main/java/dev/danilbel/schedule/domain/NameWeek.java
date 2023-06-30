@@ -7,7 +7,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
-public enum ScheduleWeek {
+public enum NameWeek {
 
     FIRST_WEEK("first", "Перший"),
     SECOND_WEEK("second", "Другий");
@@ -15,16 +15,16 @@ public enum ScheduleWeek {
     String week;
     String nameWeek;
 
-    public static ScheduleWeek fromValue(String week) {
-        for (ScheduleWeek scheduleWeek : ScheduleWeek.values()) {
+    public static NameWeek fromValue(String week) {
+        for (NameWeek scheduleWeek : NameWeek.values()) {
             if (scheduleWeek.week.equals(week)) {
                 return scheduleWeek;
             }
         }
-        throw new IllegalArgumentException("Invalid value for ScheduleWeek: " + week);
+        throw new IllegalArgumentException("Invalid value for NameWeek: " + week);
     }
 
-    public ScheduleWeek getNextWeek() {
+    public NameWeek getNextWeek() {
         return this == FIRST_WEEK ? SECOND_WEEK : FIRST_WEEK;
     }
 }

@@ -1,7 +1,7 @@
 package dev.danilbel.schedule.bot.service;
 
 import dev.danilbel.schedule.domain.ScheduleDay;
-import dev.danilbel.schedule.domain.ScheduleWeek;
+import dev.danilbel.schedule.domain.NameWeek;
 import dev.danilbel.schedule.domain.TimeTable;
 import dev.danilbel.schedule.domain.DayOfWeek;
 import dev.danilbel.schedule.parser.service.ScheduleDateTimeParser;
@@ -103,9 +103,9 @@ public class ProcessCommandService {
     public SendMessage processCommandNextWeek(Update update) {
 
         var dateTime = scheduleDateTimeParser.getScheduleDateTime();
-        var scheduleWeek = dateTime.getScheduleWeek() == ScheduleWeek.FIRST_WEEK
-                ? ScheduleWeek.SECOND_WEEK
-                : ScheduleWeek.FIRST_WEEK;
+        var scheduleWeek = dateTime.getScheduleWeek() == NameWeek.FIRST_WEEK
+                ? NameWeek.SECOND_WEEK
+                : NameWeek.FIRST_WEEK;
         var schedule = scheduleParser.getScheduleByWeek(scheduleWeek);
 
         var msg = scheduleToString(scheduleWeek, schedule);
@@ -113,7 +113,7 @@ public class ProcessCommandService {
         return messageService.makeSendMessageWithText(update, msg);
     }
 
-    private String scheduleToString(ScheduleWeek scheduleWeek, List<ScheduleDay> schedule) {
+    private String scheduleToString(NameWeek scheduleWeek, List<ScheduleDay> schedule) {
 
         var msg = new StringBuilder(String.format("<b>Пари на поточний (%s) тиждень:</b>\n\n",
                 scheduleWeek.getNameWeek().toLowerCase()));

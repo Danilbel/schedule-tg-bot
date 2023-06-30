@@ -3,7 +3,7 @@ package dev.danilbel.schedule.parser.service;
 import com.google.gson.Gson;
 import dev.danilbel.schedule.domain.ScheduleDay;
 import dev.danilbel.schedule.domain.SchedulePair;
-import dev.danilbel.schedule.domain.ScheduleWeek;
+import dev.danilbel.schedule.domain.NameWeek;
 import dev.danilbel.schedule.domain.TimeTable;
 import dev.danilbel.schedule.domain.DayOfWeek;
 import dev.danilbel.schedule.parser.response.ScheduleApiResponse;
@@ -21,7 +21,7 @@ public class ScheduleParser {
 
     ResponseApiService responseApiService;
 
-    public List<ScheduleDay> getScheduleByWeek(ScheduleWeek scheduleWeek) {
+    public List<ScheduleDay> getScheduleByWeek(NameWeek scheduleWeek) {
 
         var json = responseApiService.getResponseApiSchedule();
 
@@ -30,7 +30,7 @@ public class ScheduleParser {
 
         var scheduleDataResponse = scheduleApiResponse.getData();
 
-        var schedule = scheduleWeek == ScheduleWeek.FIRST_WEEK
+        var schedule = scheduleWeek == NameWeek.FIRST_WEEK
                 ? scheduleDataResponse.getScheduleFirstWeek()
                 : scheduleDataResponse.getScheduleSecondWeek();
 

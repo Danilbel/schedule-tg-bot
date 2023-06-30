@@ -2,7 +2,7 @@ package dev.danilbel.schedule.parser.service;
 
 import com.google.gson.Gson;
 import dev.danilbel.schedule.domain.ScheduleDateTime;
-import dev.danilbel.schedule.domain.ScheduleWeek;
+import dev.danilbel.schedule.domain.NameWeek;
 import dev.danilbel.schedule.domain.DayOfWeek;
 import dev.danilbel.schedule.parser.config.ParserConfig;
 import dev.danilbel.schedule.parser.response.WorldTimeApiResponse;
@@ -51,7 +51,7 @@ public class ScheduleDateTimeParser {
                 .build();
     }
 
-    private ScheduleWeek getScheduleWeek(LocalDate currentDate) {
+    private NameWeek getScheduleWeek(LocalDate currentDate) {
 
         var startSemesterDate = parserConfig.getStartSemesterDate();
 
@@ -63,16 +63,16 @@ public class ScheduleDateTimeParser {
 
         var startSemesterWeek = parserConfig.getStartSemesterWeek();
 
-        if (startSemesterWeek == ScheduleWeek.FIRST_WEEK) {
+        if (startSemesterWeek == NameWeek.FIRST_WEEK) {
 
             return weekNumber % 2 != 0
-                    ? ScheduleWeek.FIRST_WEEK
-                    : ScheduleWeek.SECOND_WEEK;
+                    ? NameWeek.FIRST_WEEK
+                    : NameWeek.SECOND_WEEK;
         } else {
 
             return weekNumber % 2 != 0
-                    ? ScheduleWeek.SECOND_WEEK
-                    : ScheduleWeek.FIRST_WEEK;
+                    ? NameWeek.SECOND_WEEK
+                    : NameWeek.FIRST_WEEK;
         }
     }
 }

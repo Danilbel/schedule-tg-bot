@@ -1,6 +1,6 @@
 package dev.danilbel.schedule.parser.config;
 
-import dev.danilbel.schedule.domain.ScheduleWeek;
+import dev.danilbel.schedule.domain.NameWeek;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +28,7 @@ public class ParserConfig {
         return LocalDate.parse(startSemesterDate);
     }
 
-    public ScheduleWeek getStartSemesterWeek() {
-        return ScheduleWeek.fromValue(startSemesterWeek);
+    public NameWeek getStartSemesterWeek() {
+        return NameWeek.fromValue(startSemesterWeek);
     }
 }

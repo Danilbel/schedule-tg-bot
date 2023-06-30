@@ -24,5 +24,5 @@ public class ScheduleDateTime {
 
     DayOfWeek weekDay;
 
-    ScheduleWeek scheduleWeek;
+    NameWeek scheduleWeek;
 }
