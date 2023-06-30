@@ -1,4 +1,4 @@
-package dev.danilbel.schedule.parser.response;
+package dev.danilbel.schedule.domain;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -9,9 +9,9 @@ import java.util.List;
 @Getter
 @Setter
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
-public class ScheduleDataResponse {
+public class Schedule {
 
-    List<ScheduleDayResponse> scheduleFirstWeek;
+    List<ScheduleDay> scheduleFirstWeek;
 
-    List<ScheduleDayResponse> scheduleSecondWeek;
+    List<ScheduleDay> scheduleSecondWeek;
 }

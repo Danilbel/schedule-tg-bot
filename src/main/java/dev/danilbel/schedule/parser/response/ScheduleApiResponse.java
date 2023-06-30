@@ -1,5 +1,7 @@
 package dev.danilbel.schedule.parser.response;
 
+import com.google.gson.annotations.SerializedName;
+import dev.danilbel.schedule.domain.Schedule;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
@@ -9,5 +11,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class ScheduleApiResponse {
 
-    ScheduleDataResponse data;
+    @SerializedName("data")
+    Schedule schedule;
 }
