@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -19,6 +20,29 @@ public class ScheduleDay {
 
     public void sort() {
         pairs.sort(Comparator.comparing(SchedulePair::getTime));
+    }
+
+    public List<TimeTable> getTimePairs() {
+
+        return pairs.stream()
+                .map(SchedulePair::getTime)
+                .collect(Collectors.toSet())
+                .stream()
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    public String toStringPairsByTime(TimeTable time) {
+
+        var stringBuilder = new StringBuilder(time.toString());
+
+        for (var pair : pairs) {
+            if (pair.getTime() == time) {
+                stringBuilder.append('\n').append(pair);
+            }
+        }
+
+        return stringBuilder.toString();
     }
 
     @Override
