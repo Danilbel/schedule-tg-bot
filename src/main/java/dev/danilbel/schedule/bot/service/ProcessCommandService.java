@@ -21,6 +21,43 @@ public class ProcessCommandService {
     ScheduleDateTimeParser scheduleDateTimeParser;
     ScheduleParser scheduleParser;
 
+    public SendMessage processCommandNext(Update update) {
+
+        var dateTime = scheduleDateTimeParser.getScheduleDateTime();
+
+        if (dateTime.getDayOfWeek() == DayOfWeek.SUNDAY) {
+
+            return messageService.makeSendMessageWithText(update, "<i>У неділю пар немає!</i>");
+        }
+
+        var scheduleCurrentDay = scheduleParser.getSchedule().
+                getScheduleDayByDayOfWeek(dateTime.getNameWeek(), dateTime.getDayOfWeek());
+
+        if (scheduleCurrentDay == null || scheduleCurrentDay.getPairs().isEmpty()) {
+
+            return messageService.makeSendMessageWithText(update, "<i>Сьогодні пар немає!</i>");
+        }
+
+        var timePairs = scheduleCurrentDay.getTimePairs();
+
+        for (TimeTable timePair : timePairs) {
+
+            if (dateTime.getTime().isBefore(timePair.getLocalTimeOfStartTime())) {
+
+                var remainingTime = timePair.getLocalTimeOfStartTime().minusHours(dateTime.getTime().getHour()).
+                        minusMinutes(dateTime.getTime().getMinute());
+
+                var msg = String.format("Наступна пара через <i>%d год. %d хв.</i>\n",
+                        remainingTime.getHour(), remainingTime.getMinute());
+                msg += scheduleCurrentDay.toStringPairsByTime(timePair);
+
+                return messageService.makeSendMessageWithText(update, msg);
+            }
+        }
+
+        return messageService.makeSendMessageWithText(update, "<i>Пар більше немає!</i>");
+    }
+
     public SendMessage processCommandCurrent(Update update) {
 
         var dateTime = scheduleDateTimeParser.getScheduleDateTime();
