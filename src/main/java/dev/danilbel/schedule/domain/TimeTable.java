@@ -32,6 +32,11 @@ public enum TimeTable {
     }
 
     public LocalTime getLocalTimeOfStartTime() {
+
+        if (startTime.equals("8.30")) {
+            return LocalTime.of(8, 30);
+        }
+
         var formatter = DateTimeFormatter.ofPattern("HH.mm");
 
         return LocalTime.parse(startTime, formatter);
