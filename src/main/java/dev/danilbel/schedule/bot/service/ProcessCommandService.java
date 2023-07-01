@@ -161,6 +161,7 @@ public class ProcessCommandService {
 
         return messageService.makeSendMessageWithText(update, "<i>Пари вже закінчилися!</i>");
     }
+
     public SendMessage processCommandTimetable(Update update) {
 
         StringBuilder msg = new StringBuilder("<b>Розклад пар:</b>\n\n");
@@ -205,7 +206,6 @@ public class ProcessCommandService {
 
         var nextWorkDay = dateTime.getDayOfWeek().getNextWorkDay();
 
-        // Если следующий рабочий день - понедельник, то перепрыгиваем воскресенье
         var nextWorkDate = dateTime.getDate().plusDays(
                 nextWorkDay == DayOfWeek.MONDAY ? 2 : 1
         );
@@ -219,7 +219,8 @@ public class ProcessCommandService {
 
         if (scheduleNextDay != null) {
 
-            var msg = String.format("<b>Пари на завтра (%02d.%02d):</b>\n\n",
+            var msg = String.format("<b>Пари на наступний робочий день (%s %02d.%02d):</b>\n\n",
+                    nextWorkDay.getFullNameDay().toLowerCase(),
                     nextWorkDate.getDayOfMonth(),
                     nextWorkDate.getMonthValue());
 
