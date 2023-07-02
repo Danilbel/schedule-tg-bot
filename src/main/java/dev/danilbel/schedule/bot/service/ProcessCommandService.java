@@ -1,8 +1,6 @@
 package dev.danilbel.schedule.bot.service;
 
-import dev.danilbel.schedule.domain.NameWeek;
-import dev.danilbel.schedule.domain.TimeTable;
-import dev.danilbel.schedule.domain.DayOfWeek;
+import dev.danilbel.schedule.domain.*;
 import dev.danilbel.schedule.parser.service.ScheduleDateTimeParser;
 import dev.danilbel.schedule.parser.service.ScheduleParser;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +8,8 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+
+import java.time.LocalDate;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
@@ -201,22 +201,11 @@ public class ProcessCommandService {
             return messageService.makeSendMessageWithText(update, "<i>У неділю пар немає!</i>");
         }
 
-        var scheduleCurrentDay = scheduleParser.getSchedule().
-                getScheduleDayByDayOfWeek(dateTime.getNameWeek(), dateTime.getDayOfWeek());
+        var msg = scheduleByNameWeekAndDayOfWeekToString(dateTime.getDate(), dateTime.getNameWeek(), dateTime.getDayOfWeek());
 
-        if (scheduleCurrentDay != null) {
+        if (msg == null) return null;
 
-            var msg = String.format("<b>Пари на сьогодні (%02d.%02d):</b>\n\n",
-                    dateTime.getDate().getDayOfMonth(),
-                    dateTime.getDate().getMonthValue());
-
-            scheduleCurrentDay.sort();
-            msg += scheduleCurrentDay;
-
-            return messageService.makeSendMessageWithText(update, msg);
-        } else {
-            return null;
-        }
+        return messageService.makeSendMessageWithText(update, msg);
     }
 
     public SendMessage processCommandNextDay(Update update) {
@@ -226,30 +215,39 @@ public class ProcessCommandService {
         var nextWorkDay = dateTime.getDayOfWeek().getNextWorkDay();
 
         var nextWorkDate = dateTime.getDate().plusDays(
-                nextWorkDay == DayOfWeek.MONDAY ? 2 : 1
+                nextWorkDay == DayOfWeek.MONDAY
+                && dateTime.getDayOfWeek() != DayOfWeek.SUNDAY
+                        ? 2 : 1
         );
 
         var nameWeek = nextWorkDay == DayOfWeek.MONDAY
                 ? dateTime.getNameWeek().getNextWeek()
                 : dateTime.getNameWeek();
 
-        var scheduleNextDay = scheduleParser.getSchedule().
-                getScheduleDayByDayOfWeek(nameWeek, nextWorkDay);
+        var msg = scheduleByNameWeekAndDayOfWeekToString(nextWorkDate, nameWeek, nextWorkDay);
 
-        if (scheduleNextDay != null) {
+        if (msg == null) return null;
 
-            var msg = String.format("<b>Пари на наступний робочий день (%s %02d.%02d):</b>\n\n",
-                    nextWorkDay.getFullNameDay().toLowerCase(),
-                    nextWorkDate.getDayOfMonth(),
-                    nextWorkDate.getMonthValue());
+        return messageService.makeSendMessageWithText(update, msg);
+    }
 
-            scheduleNextDay.sort();
-            msg += scheduleNextDay;
+    private String scheduleByNameWeekAndDayOfWeekToString(LocalDate date, NameWeek nameWeek, DayOfWeek dayOfWeek) {
 
-            return messageService.makeSendMessageWithText(update, msg);
-        } else {
-            return null;
-        }
+        var scheduleDay = scheduleParser.getSchedule().
+                getScheduleDayByDayOfWeek(nameWeek, dayOfWeek);
+
+        return scheduleDay.map(day -> {
+
+            var msg = String.format("<b>Пари на %s (%02d.%02d):</b>\n\n",
+                    dayOfWeek.getFullNameDay().toLowerCase(),
+                    date.getDayOfMonth(),
+                    date.getMonthValue());
+
+            day.sort();
+            msg += day;
+
+            return msg;
+        }).orElse(null);
     }
 
     public SendMessage processCommandCurrentWeek(Update update) {

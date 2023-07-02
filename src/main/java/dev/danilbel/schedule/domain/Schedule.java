@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -36,12 +37,11 @@ public class Schedule {
                 : scheduleSecondWeek;
     }
 
-    public ScheduleDay getScheduleDayByDayOfWeek(NameWeek nameWeek, DayOfWeek dayOfWeek) {
+    public Optional<ScheduleDay> getScheduleDayByDayOfWeek(NameWeek nameWeek, DayOfWeek dayOfWeek) {
 
         return getScheduleByWeek(nameWeek).stream()
                 .filter(scheduleDay -> scheduleDay.getDay() == dayOfWeek)
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 
     public String scheduleByNameWeekToString(NameWeek nameWeek) {
