@@ -285,10 +285,6 @@ public class ProcessCommandService {
 
     public SendMessage processCommandHelp(Update update) {
 
-        var msg = "<b>Команди бота:</b>\n\n";
-
-        msg += commandService.commandListToString();
-
-        return messageService.makeSendMessageWithText(update, msg);
+        return messageService.makeSendMessageWithText(update, commandService.commandListToString());
     }
 }

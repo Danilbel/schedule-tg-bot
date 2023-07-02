@@ -56,15 +56,24 @@ public class CommandService {
 
     public String commandListToString() {
 
-        var stringBuilder = new StringBuilder();
-
-        for (var command : Command.values()) {
-            stringBuilder.append(command.getCommand())
-                    .append(" – ")
-                    .append(command.getDescription())
-                    .append("\n");
-        }
-
-        return stringBuilder.toString();
+        return """
+                <b>Команди бота:</b>
+                                
+                /start – почати роботу з ботом
+                                
+                /current – поточна пара
+                /next – наступна пара
+                                
+                /last – скільки часу залишилось до кінця пари або перерви
+                /timetable – розклад пар
+                                
+                /today – пари на сьогодні
+                /next_day – пари на наступний робочий день
+                                
+                /current_week – пари на поточний тиждень
+                /next_week – пари на наступний тиждень
+                                
+                /help – повний список команд
+                """;
     }
 }
