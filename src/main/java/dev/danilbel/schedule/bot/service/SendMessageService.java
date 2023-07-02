@@ -9,11 +9,11 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class SendMessageService {
 
     public SendMessage makeSendMessageWithText(Update update, String text) {
-        var sendMessage = new SendMessage();
-        sendMessage.setParseMode(ParseMode.HTML);
-        sendMessage.setChatId(update.getMessage().getChatId());
-        sendMessage.setText(text);
-        sendMessage.disableWebPagePreview();
-        return sendMessage;
+        return SendMessage.builder()
+                .chatId(update.getMessage().getChatId().toString())
+                .text(text)
+                .parseMode(ParseMode.HTML)
+                .disableWebPagePreview(true)
+                .build();
     }
 }
