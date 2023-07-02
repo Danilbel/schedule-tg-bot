@@ -40,61 +40,11 @@ public class ProcessCommandService {
         return messageService.makeSendMessageWithText(update, msg);
     }
 
-    public SendMessage processCommandNext(Update update) {
-
-        var dateTime = scheduleDateTimeParser.getScheduleDateTime();
-
-        if (dateTime.getDayOfWeek() == DayOfWeek.SUNDAY) {
-
-            return messageService.makeSendMessageWithText(update, "<i>У неділю пар немає!</i>");
-        }
-
-        var scheduleCurrentDay = scheduleParser.getSchedule().
-                getScheduleDayByDayOfWeek(dateTime.getNameWeek(), dateTime.getDayOfWeek())
-                .orElse(null);
-
-        if (scheduleCurrentDay == null || scheduleCurrentDay.getPairs().isEmpty()) {
-
-            return messageService.makeSendMessageWithText(update, "<i>Сьогодні пар немає!</i>");
-        }
-
-        var timePairs = scheduleCurrentDay.getTimePairs();
-
-        for (TimeTable timePair : timePairs) {
-
-            if (dateTime.getTime().isBefore(timePair.getLocalTimeOfStartTime())) {
-
-                var remainingTime = timePair.getLocalTimeOfStartTime().minusHours(dateTime.getTime().getHour()).
-                        minusMinutes(dateTime.getTime().getMinute());
-
-                var msg = String.format("Наступна пара через <i>%d год. %d хв.</i>\n",
-                        remainingTime.getHour(), remainingTime.getMinute());
-                msg += scheduleCurrentDay.toStringPairsByTime(timePair);
-
-                return messageService.makeSendMessageWithText(update, msg);
-            }
-        }
-
-        return messageService.makeSendMessageWithText(update, "<i>Пар більше немає!</i>");
-    }
-
     public SendMessage processCommandCurrent(Update update) {
 
         var dateTime = scheduleDateTimeParser.getScheduleDateTime();
 
-        if (dateTime.getDayOfWeek() == DayOfWeek.SUNDAY) {
-
-            return messageService.makeSendMessageWithText(update, "<i>У неділю пар немає!</i>");
-        }
-
-        var scheduleCurrentDay = scheduleParser.getSchedule().
-                getScheduleDayByDayOfWeek(dateTime.getNameWeek(), dateTime.getDayOfWeek())
-                .orElse(null);
-
-        if (scheduleCurrentDay == null || scheduleCurrentDay.getPairs().isEmpty()) {
-
-            return messageService.makeSendMessageWithText(update, "<i>Сьогодні пар немає!</i>");
-        }
+        var scheduleCurrentDay = getScheduleDayByScheduleDateTime(dateTime);
 
         var timePairs = scheduleCurrentDay.getTimePairs();
 
@@ -130,23 +80,37 @@ public class ProcessCommandService {
         return messageService.makeSendMessageWithText(update, "<i>Пари вже закінчилися!</i>");
     }
 
+    public SendMessage processCommandNext(Update update) {
+
+        var dateTime = scheduleDateTimeParser.getScheduleDateTime();
+
+        var scheduleCurrentDay = getScheduleDayByScheduleDateTime(dateTime);
+
+        var timePairs = scheduleCurrentDay.getTimePairs();
+
+        for (TimeTable timePair : timePairs) {
+
+            if (dateTime.getTime().isBefore(timePair.getLocalTimeOfStartTime())) {
+
+                var remainingTime = timePair.getLocalTimeOfStartTime().minusHours(dateTime.getTime().getHour()).
+                        minusMinutes(dateTime.getTime().getMinute());
+
+                var msg = String.format("Наступна пара через <i>%d год. %d хв.</i>\n",
+                        remainingTime.getHour(), remainingTime.getMinute());
+                msg += scheduleCurrentDay.toStringPairsByTime(timePair);
+
+                return messageService.makeSendMessageWithText(update, msg);
+            }
+        }
+
+        return messageService.makeSendMessageWithText(update, "<i>Пар більше немає!</i>");
+    }
+
     public SendMessage processCommandLast(Update update) {
 
         var dateTime = scheduleDateTimeParser.getScheduleDateTime();
 
-        if (dateTime.getDayOfWeek() == DayOfWeek.SUNDAY) {
-
-            return messageService.makeSendMessageWithText(update, "<i>У неділю пар немає!</i>");
-        }
-
-        var scheduleCurrentDay = scheduleParser.getSchedule().
-                getScheduleDayByDayOfWeek(dateTime.getNameWeek(), dateTime.getDayOfWeek())
-                .orElse(null);
-
-        if (scheduleCurrentDay == null || scheduleCurrentDay.getPairs().isEmpty()) {
-
-            return messageService.makeSendMessageWithText(update, "<i>Сьогодні пар немає!</i>");
-        }
+        var scheduleCurrentDay = getScheduleDayByScheduleDateTime(dateTime);
 
         var timePairs = scheduleCurrentDay.getTimePairs();
 
@@ -182,6 +146,25 @@ public class ProcessCommandService {
         }
 
         return messageService.makeSendMessageWithText(update, "<i>Пари вже закінчилися!</i>");
+    }
+
+    private ScheduleDay getScheduleDayByScheduleDateTime(ScheduleDateTime dateTime) {
+
+        if (dateTime.getDayOfWeek() == DayOfWeek.SUNDAY) {
+
+            throw new IllegalArgumentException("<i>У неділю пар немає!</i>");
+        }
+
+        var scheduleCurrentDay = scheduleParser.getSchedule().
+                getScheduleDayByDayOfWeek(dateTime.getNameWeek(), dateTime.getDayOfWeek())
+                .orElse(null);
+
+        if (scheduleCurrentDay == null || scheduleCurrentDay.getPairs().isEmpty()) {
+
+            throw new IllegalArgumentException("<i>Сьогодні пар немає!</i>");
+        }
+
+        return scheduleCurrentDay;
     }
 
     public SendMessage processCommandTimetable(Update update) {
