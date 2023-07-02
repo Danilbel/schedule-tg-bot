@@ -17,7 +17,7 @@ import java.time.LocalDate;
 public class ProcessCommandService {
 
     CommandService commandService;
-    MessageService messageService;
+    SendMessageService messageService;
 
     ScheduleDateTimeParser scheduleDateTimeParser;
     ScheduleParser scheduleParser;
