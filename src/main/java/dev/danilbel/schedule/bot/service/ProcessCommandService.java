@@ -44,7 +44,14 @@ public class ProcessCommandService {
 
         var dateTime = scheduleDateTimeParser.getScheduleDateTime();
 
-        var scheduleCurrentDay = getScheduleDayByScheduleDateTime(dateTime);
+        ScheduleDay scheduleCurrentDay;
+        try {
+
+            scheduleCurrentDay = getScheduleDayByScheduleDateTime(dateTime);
+        } catch (IllegalArgumentException e) {
+
+            return messageService.makeSendMessageWithText(update, e.getMessage());
+        }
 
         var timePairs = scheduleCurrentDay.getTimePairs();
 
@@ -84,7 +91,14 @@ public class ProcessCommandService {
 
         var dateTime = scheduleDateTimeParser.getScheduleDateTime();
 
-        var scheduleCurrentDay = getScheduleDayByScheduleDateTime(dateTime);
+        ScheduleDay scheduleCurrentDay;
+        try {
+
+            scheduleCurrentDay = getScheduleDayByScheduleDateTime(dateTime);
+        } catch (IllegalArgumentException e) {
+
+            return messageService.makeSendMessageWithText(update, e.getMessage());
+        }
 
         var timePairs = scheduleCurrentDay.getTimePairs();
 
@@ -110,7 +124,14 @@ public class ProcessCommandService {
 
         var dateTime = scheduleDateTimeParser.getScheduleDateTime();
 
-        var scheduleCurrentDay = getScheduleDayByScheduleDateTime(dateTime);
+        ScheduleDay scheduleCurrentDay;
+        try {
+
+            scheduleCurrentDay = getScheduleDayByScheduleDateTime(dateTime);
+        } catch (IllegalArgumentException e) {
+
+            return messageService.makeSendMessageWithText(update, e.getMessage());
+        }
 
         var timePairs = scheduleCurrentDay.getTimePairs();
 
