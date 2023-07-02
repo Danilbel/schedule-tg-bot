@@ -53,27 +53,4 @@ public class CommandService {
         }
         throw new IllegalArgumentException("Invalid value for Command: " + commandName);
     }
-
-    public String commandListToString() {
-
-        return """
-                <b>Команди бота:</b>
-                                
-                /start – почати роботу з ботом
-                                
-                /current – поточна пара
-                /next – наступна пара
-                                
-                /last – скільки часу залишилось до кінця пари або перерви
-                /timetable – розклад пар
-                                
-                /today – пари на сьогодні
-                /next_day – пари на наступний робочий день
-                                
-                /current_week – пари на поточний тиждень
-                /next_week – пари на наступний тиждень
-                                
-                /help – повний список команд
-                """;
-    }
 }

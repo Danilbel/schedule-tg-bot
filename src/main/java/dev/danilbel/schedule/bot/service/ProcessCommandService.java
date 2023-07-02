@@ -16,28 +16,15 @@ import java.time.LocalDate;
 @Service
 public class ProcessCommandService {
 
-    CommandService commandService;
-    SendMessageService messageService;
+    MessageService messageService;
+    SendMessageService sendMessageService;
 
     ScheduleDateTimeParser scheduleDateTimeParser;
     ScheduleParser scheduleParser;
 
     public SendMessage processCommandStart(Update update) {
 
-        var msg = "<b>Хеййоу!\n" +
-                  "Я бот, який допоможе з розкладом пар КПІ!</b>\n\n" +
-                  "Які пари на поточний та наступний тиждень, на сьогодні та наступний робочий день. " +
-                  "Яка пара зараз та яка наступна. Скільки часу залишилось до кінця пари або перерви. " +
-                  "Це все я дізнаюсь з сайту " +
-                  "<a href=\"https://schedule.kpi.ua/\">розкладу КПІ</a> " +
-                  "та надам тобі відповідь.\n\n" +
-                  "– Користуйся мною у особистих повідомленнях або додай до чату групи.\n" +
-                  "– Дізнайся про всі команди бота: /help\n\n" +
-                  "<i>v1.0.0 (beta)\n" +
-                  "Бот працює за умови роботи API сайту https://schedule.kpi.ua/api\n" +
-                  "Автор боту: @danillbel</i>";
-
-        return messageService.makeSendMessageWithText(update, msg);
+        return sendMessageService.makeSendMessageWithText(update, messageService.getStartMessage());
     }
 
     public SendMessage processCommandCurrent(Update update) {
@@ -50,7 +37,7 @@ public class ProcessCommandService {
             scheduleCurrentDay = getScheduleDayByScheduleDateTime(dateTime);
         } catch (IllegalArgumentException e) {
 
-            return messageService.makeSendMessageWithText(update, e.getMessage());
+            return sendMessageService.makeSendMessageWithText(update, e.getMessage());
         }
 
         var timePairs = scheduleCurrentDay.getTimePairs();
@@ -73,18 +60,18 @@ public class ProcessCommandService {
                         remainingTime.getHour(), remainingTime.getMinute());
                 msg += scheduleCurrentDay.toStringPairsByTime(timePair);
 
-                return messageService.makeSendMessageWithText(update, msg);
+                return sendMessageService.makeSendMessageWithText(update, msg);
 
             } else if (dateTime.getTime().isBefore(timePair.getLocalTimeOfEndTime())) {
 
                 var msg = "<b>Зараз пара:</b>\n\n";
                 msg += scheduleCurrentDay.toStringPairsByTime(timePair);
 
-                return messageService.makeSendMessageWithText(update, msg);
+                return sendMessageService.makeSendMessageWithText(update, msg);
             }
         }
 
-        return messageService.makeSendMessageWithText(update, "<i>Пари вже закінчилися!</i>");
+        return sendMessageService.makeSendMessageWithText(update, "<i>Пари вже закінчилися!</i>");
     }
 
     public SendMessage processCommandNext(Update update) {
@@ -97,7 +84,7 @@ public class ProcessCommandService {
             scheduleCurrentDay = getScheduleDayByScheduleDateTime(dateTime);
         } catch (IllegalArgumentException e) {
 
-            return messageService.makeSendMessageWithText(update, e.getMessage());
+            return sendMessageService.makeSendMessageWithText(update, e.getMessage());
         }
 
         var timePairs = scheduleCurrentDay.getTimePairs();
@@ -113,11 +100,11 @@ public class ProcessCommandService {
                         remainingTime.getHour(), remainingTime.getMinute());
                 msg += scheduleCurrentDay.toStringPairsByTime(timePair);
 
-                return messageService.makeSendMessageWithText(update, msg);
+                return sendMessageService.makeSendMessageWithText(update, msg);
             }
         }
 
-        return messageService.makeSendMessageWithText(update, "<i>Пар більше немає!</i>");
+        return sendMessageService.makeSendMessageWithText(update, "<i>Пар більше немає!</i>");
     }
 
     public SendMessage processCommandLast(Update update) {
@@ -130,7 +117,7 @@ public class ProcessCommandService {
             scheduleCurrentDay = getScheduleDayByScheduleDateTime(dateTime);
         } catch (IllegalArgumentException e) {
 
-            return messageService.makeSendMessageWithText(update, e.getMessage());
+            return sendMessageService.makeSendMessageWithText(update, e.getMessage());
         }
 
         var timePairs = scheduleCurrentDay.getTimePairs();
@@ -152,7 +139,7 @@ public class ProcessCommandService {
                 msg += String.format("<i>%d год. %d хв. %d сек.</i>",
                         remainingTime.getHour(), remainingTime.getMinute(), remainingTime.getSecond());
 
-                return messageService.makeSendMessageWithText(update, msg);
+                return sendMessageService.makeSendMessageWithText(update, msg);
 
             } else if (dateTime.getTime().isBefore(timePair.getLocalTimeOfEndTime())) {
 
@@ -162,11 +149,11 @@ public class ProcessCommandService {
                 var msg = String.format("<b>До кінця пари залишилося:</b>\n\n<i>%d год. %d хв. %d сек.</i>",
                         remainingTime.getHour(), remainingTime.getMinute(), remainingTime.getSecond());
 
-                return messageService.makeSendMessageWithText(update, msg);
+                return sendMessageService.makeSendMessageWithText(update, msg);
             }
         }
 
-        return messageService.makeSendMessageWithText(update, "<i>Пари вже закінчилися!</i>");
+        return sendMessageService.makeSendMessageWithText(update, "<i>Пари вже закінчилися!</i>");
     }
 
     private ScheduleDay getScheduleDayByScheduleDateTime(ScheduleDateTime dateTime) {
@@ -190,7 +177,7 @@ public class ProcessCommandService {
 
     public SendMessage processCommandTimetable(Update update) {
 
-        return messageService.makeSendMessageWithText(update, TimeTable.timeTableToString());
+        return sendMessageService.makeSendMessageWithText(update, TimeTable.timeTableToString());
     }
 
     public SendMessage processCommandToday(Update update) {
@@ -199,14 +186,14 @@ public class ProcessCommandService {
 
         if (dateTime.getDayOfWeek() == DayOfWeek.SUNDAY) {
 
-            return messageService.makeSendMessageWithText(update, "<i>У неділю пар немає!</i>");
+            return sendMessageService.makeSendMessageWithText(update, "<i>У неділю пар немає!</i>");
         }
 
         var msg = scheduleByNameWeekAndDayOfWeekToString(dateTime.getDate(), dateTime.getNameWeek(), dateTime.getDayOfWeek());
 
         if (msg == null) return null;
 
-        return messageService.makeSendMessageWithText(update, msg);
+        return sendMessageService.makeSendMessageWithText(update, msg);
     }
 
     public SendMessage processCommandNextDay(Update update) {
@@ -229,7 +216,7 @@ public class ProcessCommandService {
 
         if (msg == null) return null;
 
-        return messageService.makeSendMessageWithText(update, msg);
+        return sendMessageService.makeSendMessageWithText(update, msg);
     }
 
     private String scheduleByNameWeekAndDayOfWeekToString(LocalDate date, NameWeek nameWeek, DayOfWeek dayOfWeek) {
@@ -258,7 +245,7 @@ public class ProcessCommandService {
                         .getNameWeek()
         );
 
-        return messageService.makeSendMessageWithText(update, msg);
+        return sendMessageService.makeSendMessageWithText(update, msg);
     }
 
     public SendMessage processCommandNextWeek(Update update) {
@@ -269,7 +256,7 @@ public class ProcessCommandService {
                         .getNextWeek()
         );
 
-        return messageService.makeSendMessageWithText(update, msg);
+        return sendMessageService.makeSendMessageWithText(update, msg);
     }
 
     private String scheduleByNameWeekToString(NameWeek nameWeek) {
@@ -287,6 +274,6 @@ public class ProcessCommandService {
 
     public SendMessage processCommandHelp(Update update) {
 
-        return messageService.makeSendMessageWithText(update, commandService.commandListToString());
+        return sendMessageService.makeSendMessageWithText(update, messageService.getHelpMessage());
     }
 }
