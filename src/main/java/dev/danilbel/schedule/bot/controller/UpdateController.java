@@ -56,10 +56,7 @@ public class UpdateController {
             case HELP -> processCommandService.processCommandHelp(update);
         };
 
-        // temporary
-        if (sendMessage != null) {
-            setView(sendMessage);
-        }
+        setView(sendMessage);
     }
 
     private void setView(SendMessage sendMessage) {
