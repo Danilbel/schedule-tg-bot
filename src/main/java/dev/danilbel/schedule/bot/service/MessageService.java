@@ -13,6 +13,7 @@ public class MessageService {
         sendMessage.setParseMode(ParseMode.HTML);
         sendMessage.setChatId(update.getMessage().getChatId());
         sendMessage.setText(text);
+        sendMessage.disableWebPagePreview();
         return sendMessage;
     }
 }

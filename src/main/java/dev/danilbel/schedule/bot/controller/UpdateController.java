@@ -44,10 +44,10 @@ public class UpdateController {
 
     private void processCommandMessage(Update update, Command command) {
         var sendMessage = switch (command) {
-            case START -> null;
-            case CURRENT -> null;
-            case NEXT -> null;
-            case LAST -> null;
+            case START -> processCommandService.processCommandStart(update);
+            case CURRENT -> processCommandService.processCommandCurrent(update);
+            case NEXT -> processCommandService.processCommandNext(update);
+            case LAST -> processCommandService.processCommandLast(update);
             case TIMETABLE -> processCommandService.processCommandTimetable(update);
             case TODAY -> processCommandService.processCommandToday(update);
             case NEXT_DAY -> processCommandService.processCommandNextDay(update);

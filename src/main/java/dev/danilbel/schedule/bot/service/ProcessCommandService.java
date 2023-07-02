@@ -21,6 +21,24 @@ public class ProcessCommandService {
     ScheduleDateTimeParser scheduleDateTimeParser;
     ScheduleParser scheduleParser;
 
+    public SendMessage processCommandStart(Update update) {
+
+        var msg = "<b>Хеййоу!\n" +
+                  "Я бот, який допоможе з розкладом пар КПІ!</b>\n\n" +
+                  "Які пари на поточний та наступний тиждень, на сьогодні та наступний робочий день. " +
+                  "Яка пара зараз та яка наступна. Скільки часу залишилось до кінця пари або перерви. " +
+                  "Це все я дізнаюсь з сайту " +
+                  "<a href=\"https://schedule.kpi.ua/\">розкладу КПІ</a> " +
+                  "та надам тобі відповідь.\n\n" +
+                  "– Користуйся мною у особистих повідомленнях або додай до чату групи.\n" +
+                  "– Дізнайся про всі команди бота: /help\n\n" +
+                  "<i>v1.0.0 (beta)\n" +
+                  "Бот працює за умови роботи API сайту https://schedule.kpi.ua/api\n" +
+                  "Автор боту: @danillbel</i>";
+
+        return messageService.makeSendMessageWithText(update, msg);
+    }
+
     public SendMessage processCommandNext(Update update) {
 
         var dateTime = scheduleDateTimeParser.getScheduleDateTime();
