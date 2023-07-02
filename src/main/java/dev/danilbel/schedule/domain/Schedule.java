@@ -30,25 +30,25 @@ public class Schedule {
         }
     }
 
-    public List<ScheduleDay> getScheduleByWeek(NameWeek nameWeek) {
+    public List<ScheduleDay> getScheduleByWeek(WeekName weekName) {
 
-        return nameWeek == NameWeek.FIRST_WEEK
+        return weekName == WeekName.FIRST_WEEK
                 ? scheduleFirstWeek
                 : scheduleSecondWeek;
     }
 
-    public Optional<ScheduleDay> getScheduleDayByDayOfWeek(NameWeek nameWeek, DayOfWeek dayOfWeek) {
+    public Optional<ScheduleDay> getScheduleDayByDayOfWeek(WeekName weekName, DayOfWeek dayOfWeek) {
 
-        return getScheduleByWeek(nameWeek).stream()
+        return getScheduleByWeek(weekName).stream()
                 .filter(scheduleDay -> scheduleDay.getDay() == dayOfWeek)
                 .findFirst();
     }
 
-    public String scheduleByNameWeekToString(NameWeek nameWeek) {
+    public String scheduleByNameWeekToString(WeekName weekName) {
 
         var stringBuilder = new StringBuilder();
 
-        var schedule = getScheduleByWeek(nameWeek);
+        var schedule = getScheduleByWeek(weekName);
 
         for (var i = 0; i < schedule.size(); i++) {
 

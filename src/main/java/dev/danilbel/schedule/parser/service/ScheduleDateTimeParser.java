@@ -2,7 +2,7 @@ package dev.danilbel.schedule.parser.service;
 
 import com.google.gson.Gson;
 import dev.danilbel.schedule.domain.ScheduleDateTime;
-import dev.danilbel.schedule.domain.NameWeek;
+import dev.danilbel.schedule.domain.WeekName;
 import dev.danilbel.schedule.domain.DayOfWeek;
 import dev.danilbel.schedule.parser.config.ParserConfig;
 import dev.danilbel.schedule.parser.response.WorldTimeApiResponse;
@@ -47,11 +47,19 @@ public class ScheduleDateTimeParser {
                 .date(currentDateTime.toLocalDate())
                 .time(currentDateTime.toLocalTime())
                 .dayOfWeek(weekDay)
-                .nameWeek(scheduleWeek)
+                .weekName(scheduleWeek)
                 .build();
+
+//        // временно для тестов
+//        return ScheduleDateTime.builder()
+//                .date(LocalDate.of(2023, 6, 26))
+//                .time(LocalTime.of(15, 50, 0))
+//                .dayOfWeek(DayOfWeek.MONDAY)
+//                .weekName(WeekName.FIRST_WEEK)
+//                .build();
     }
 
-    private NameWeek getScheduleWeek(LocalDate currentDate) {
+    private WeekName getScheduleWeek(LocalDate currentDate) {
 
         var startSemesterDate = parserConfig.getStartSemesterDate();
 
@@ -63,16 +71,16 @@ public class ScheduleDateTimeParser {
 
         var startSemesterWeek = parserConfig.getStartSemesterWeek();
 
-        if (startSemesterWeek == NameWeek.FIRST_WEEK) {
+        if (startSemesterWeek == WeekName.FIRST_WEEK) {
 
             return weekNumber % 2 != 0
-                    ? NameWeek.FIRST_WEEK
-                    : NameWeek.SECOND_WEEK;
+                    ? WeekName.FIRST_WEEK
+                    : WeekName.SECOND_WEEK;
         } else {
 
             return weekNumber % 2 != 0
-                    ? NameWeek.SECOND_WEEK
-                    : NameWeek.FIRST_WEEK;
+                    ? WeekName.SECOND_WEEK
+                    : WeekName.FIRST_WEEK;
         }
     }
 }

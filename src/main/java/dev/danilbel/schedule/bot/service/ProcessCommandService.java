@@ -164,7 +164,7 @@ public class ProcessCommandService {
         }
 
         var scheduleCurrentDay = scheduleParser.getSchedule().
-                getScheduleDayByDayOfWeek(dateTime.getNameWeek(), dateTime.getDayOfWeek())
+                getScheduleDayByDayOfWeek(dateTime.getWeekName(), dateTime.getDayOfWeek())
                 .orElse(null);
 
         if (scheduleCurrentDay == null || scheduleCurrentDay.getPairs().isEmpty()) {
@@ -189,7 +189,7 @@ public class ProcessCommandService {
             return sendMessageService.makeSendMessageWithText(update, "<i>У неділю пар немає!</i>");
         }
 
-        var msg = scheduleByNameWeekAndDayOfWeekToString(dateTime.getDate(), dateTime.getNameWeek(), dateTime.getDayOfWeek());
+        var msg = scheduleByNameWeekAndDayOfWeekToString(dateTime.getDate(), dateTime.getWeekName(), dateTime.getDayOfWeek());
 
         if (msg == null) return null;
 
@@ -209,8 +209,8 @@ public class ProcessCommandService {
         );
 
         var nameWeek = nextWorkDay == DayOfWeek.MONDAY
-                ? dateTime.getNameWeek().getNextWeek()
-                : dateTime.getNameWeek();
+                ? dateTime.getWeekName().getNextWeek()
+                : dateTime.getWeekName();
 
         var msg = scheduleByNameWeekAndDayOfWeekToString(nextWorkDate, nameWeek, nextWorkDay);
 
@@ -219,10 +219,10 @@ public class ProcessCommandService {
         return sendMessageService.makeSendMessageWithText(update, msg);
     }
 
-    private String scheduleByNameWeekAndDayOfWeekToString(LocalDate date, NameWeek nameWeek, DayOfWeek dayOfWeek) {
+    private String scheduleByNameWeekAndDayOfWeekToString(LocalDate date, WeekName weekName, DayOfWeek dayOfWeek) {
 
         var scheduleDay = scheduleParser.getSchedule().
-                getScheduleDayByDayOfWeek(nameWeek, dayOfWeek);
+                getScheduleDayByDayOfWeek(weekName, dayOfWeek);
 
         return scheduleDay.map(day -> {
 
@@ -242,7 +242,7 @@ public class ProcessCommandService {
 
         var msg = scheduleByNameWeekToString(
                 scheduleDateTimeParser.getScheduleDateTime()
-                        .getNameWeek()
+                        .getWeekName()
         );
 
         return sendMessageService.makeSendMessageWithText(update, msg);
@@ -252,22 +252,22 @@ public class ProcessCommandService {
 
         var msg = scheduleByNameWeekToString(
                 scheduleDateTimeParser.getScheduleDateTime()
-                        .getNameWeek()
+                        .getWeekName()
                         .getNextWeek()
         );
 
         return sendMessageService.makeSendMessageWithText(update, msg);
     }
 
-    private String scheduleByNameWeekToString(NameWeek nameWeek) {
+    private String scheduleByNameWeekToString(WeekName weekName) {
 
         var msg = String.format("<b>Пари на %s тиждень:</b>\n\n",
-                nameWeek.getNameWeek().toLowerCase());
+                weekName.getNameWeek().toLowerCase());
 
         var schedule = scheduleParser.getSchedule();
         schedule.sort();
 
-        msg += schedule.scheduleByNameWeekToString(nameWeek);
+        msg += schedule.scheduleByNameWeekToString(weekName);
 
         return msg;
     }
