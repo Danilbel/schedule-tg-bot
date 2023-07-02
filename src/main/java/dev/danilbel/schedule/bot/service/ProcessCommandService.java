@@ -50,7 +50,8 @@ public class ProcessCommandService {
         }
 
         var scheduleCurrentDay = scheduleParser.getSchedule().
-                getScheduleDayByDayOfWeek(dateTime.getNameWeek(), dateTime.getDayOfWeek());
+                getScheduleDayByDayOfWeek(dateTime.getNameWeek(), dateTime.getDayOfWeek())
+                .orElse(null);
 
         if (scheduleCurrentDay == null || scheduleCurrentDay.getPairs().isEmpty()) {
 
@@ -87,7 +88,8 @@ public class ProcessCommandService {
         }
 
         var scheduleCurrentDay = scheduleParser.getSchedule().
-                getScheduleDayByDayOfWeek(dateTime.getNameWeek(), dateTime.getDayOfWeek());
+                getScheduleDayByDayOfWeek(dateTime.getNameWeek(), dateTime.getDayOfWeek())
+                .orElse(null);
 
         if (scheduleCurrentDay == null || scheduleCurrentDay.getPairs().isEmpty()) {
 
@@ -138,7 +140,8 @@ public class ProcessCommandService {
         }
 
         var scheduleCurrentDay = scheduleParser.getSchedule().
-                getScheduleDayByDayOfWeek(dateTime.getNameWeek(), dateTime.getDayOfWeek());
+                getScheduleDayByDayOfWeek(dateTime.getNameWeek(), dateTime.getDayOfWeek())
+                .orElse(null);
 
         if (scheduleCurrentDay == null || scheduleCurrentDay.getPairs().isEmpty()) {
 
