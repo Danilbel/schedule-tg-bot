@@ -183,13 +183,7 @@ public class ProcessCommandService {
 
     public SendMessage processCommandTimetable(Update update) {
 
-        StringBuilder msg = new StringBuilder("<b>Розклад пар:</b>\n\n");
-
-        for (var time : TimeTable.values()) {
-            msg.append(time).append("\n");
-        }
-
-        return messageService.makeSendMessageWithText(update, msg.toString());
+        return messageService.makeSendMessageWithText(update, TimeTable.timeTableToString());
     }
 
     public SendMessage processCommandToday(Update update) {
