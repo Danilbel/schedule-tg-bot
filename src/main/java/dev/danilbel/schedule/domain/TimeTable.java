@@ -31,17 +31,6 @@ public enum TimeTable {
         throw new IllegalArgumentException("Invalid value for TimeTable: " + startTime);
     }
 
-    public static String timeTableToString() {
-
-        StringBuilder msg = new StringBuilder("<b>Розклад пар:</b>\n\n");
-
-        for (var time : TimeTable.values()) {
-            msg.append(time).append("\n");
-        }
-
-        return msg.toString();
-    }
-
     public LocalTime getLocalTimeOfStartTime() {
 
         if (startTime.equals("8.30")) {

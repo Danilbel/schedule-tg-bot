@@ -18,29 +18,4 @@ public class SchedulePair {
     String name;
 
     String place;
-
-    @Override
-    public String toString() {
-        var stringBuilder = new StringBuilder("– ");
-
-        stringBuilder.append(name)
-                .append("<i>");
-
-        if (type != null && !type.trim().isEmpty()) {
-            stringBuilder.append(", ")
-                    .append(type);
-        }
-
-        if (place != null && !place.trim().isEmpty()) {
-            stringBuilder.append(", place: ")
-                    .append(place);
-        }
-
-        if (teacherName != null && !teacherName.trim().isEmpty()) {
-            stringBuilder.append(", ")
-                    .append(teacherName);
-        }
-
-        return stringBuilder.append("</i>").toString();
-    }
 }
