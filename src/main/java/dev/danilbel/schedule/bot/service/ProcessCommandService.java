@@ -1,5 +1,6 @@
 package dev.danilbel.schedule.bot.service;
 
+import dev.danilbel.schedule.domain.NameWeek;
 import dev.danilbel.schedule.domain.TimeTable;
 import dev.danilbel.schedule.domain.DayOfWeek;
 import dev.danilbel.schedule.parser.service.ScheduleDateTimeParser;
@@ -253,34 +254,36 @@ public class ProcessCommandService {
 
     public SendMessage processCommandCurrentWeek(Update update) {
 
-        var dateTime = scheduleDateTimeParser.getScheduleDateTime();
-
-        var msg = String.format("<b>Пари на поточний (%s) тиждень:</b>\n\n",
-                dateTime.getNameWeek().getNameWeek().toLowerCase());
-
-        var schedule = scheduleParser.getSchedule();
-        schedule.sort();
-
-        msg += schedule.toStringScheduleByWeek(dateTime.getNameWeek());
+        var msg = scheduleByNameWeekToString(
+                scheduleDateTimeParser.getScheduleDateTime()
+                        .getNameWeek()
+        );
 
         return messageService.makeSendMessageWithText(update, msg);
     }
 
     public SendMessage processCommandNextWeek(Update update) {
 
-        var dateTime = scheduleDateTimeParser.getScheduleDateTime();
+        var msg = scheduleByNameWeekToString(
+                scheduleDateTimeParser.getScheduleDateTime()
+                        .getNameWeek()
+                        .getNextWeek()
+        );
 
-        var nextNameWeek = dateTime.getNameWeek().getNextWeek();
+        return messageService.makeSendMessageWithText(update, msg);
+    }
 
-        var msg = String.format("<b>Пари на наступний (%s) тиждень:</b>\n\n",
-                nextNameWeek.getNameWeek().toLowerCase());
+    private String scheduleByNameWeekToString(NameWeek nameWeek) {
+
+        var msg = String.format("<b>Пари на %s тиждень:</b>\n\n",
+                nameWeek.getNameWeek().toLowerCase());
 
         var schedule = scheduleParser.getSchedule();
         schedule.sort();
 
-        msg += schedule.toStringScheduleByWeek(nextNameWeek);
+        msg += schedule.scheduleByNameWeekToString(nameWeek);
 
-        return messageService.makeSendMessageWithText(update, msg);
+        return msg;
     }
 
     public SendMessage processCommandHelp(Update update) {

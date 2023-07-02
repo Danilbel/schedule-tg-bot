@@ -44,7 +44,7 @@ public class Schedule {
                 .orElse(null);
     }
 
-    public String toStringScheduleByWeek(NameWeek nameWeek) {
+    public String scheduleByNameWeekToString(NameWeek nameWeek) {
 
         var stringBuilder = new StringBuilder();
 
