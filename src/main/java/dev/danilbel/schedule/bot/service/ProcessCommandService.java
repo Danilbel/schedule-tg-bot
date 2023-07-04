@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.Message;
 
 @RequiredArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
@@ -19,57 +19,57 @@ public class ProcessCommandService {
     ScheduleDateTimeParser scheduleDateTimeParser;
     ScheduleParser scheduleParser;
 
-    public SendMessage processCommandStart(Update update) {
+    public SendMessage processCommandStart(Message message) {
 
-        return sendMessageService.makeSendMessageWithText(update, messageService.getStartMessage());
+        return sendMessageService.makeSendMessageWithText(message, messageService.getStartMessage());
     }
 
-    public SendMessage processCommandCurrent(Update update) {
+    public SendMessage processCommandCurrent(Message message) {
 
         var dateTime = scheduleDateTimeParser.getScheduleDateTime();
         var schedule = scheduleParser.getSchedule();
 
         var msg = messageService.makeCurrentPairMessageByScheduleDateTime(schedule, dateTime);
 
-        return sendMessageService.makeSendMessageWithText(update, msg);
+        return sendMessageService.makeSendMessageWithText(message, msg);
     }
 
-    public SendMessage processCommandNext(Update update) {
+    public SendMessage processCommandNext(Message message) {
 
         var dateTime = scheduleDateTimeParser.getScheduleDateTime();
         var schedule = scheduleParser.getSchedule();
 
         var msg = messageService.makeNextPairMessageByScheduleDateTime(schedule, dateTime);
 
-        return sendMessageService.makeSendMessageWithText(update, msg);
+        return sendMessageService.makeSendMessageWithText(message, msg);
     }
 
-    public SendMessage processCommandLast(Update update) {
+    public SendMessage processCommandLast(Message message) {
 
         var dateTime = scheduleDateTimeParser.getScheduleDateTime();
         var schedule = scheduleParser.getSchedule();
 
         var msg = messageService.makeRemainingTimeMessageByScheduleDateTime(schedule, dateTime);
 
-        return sendMessageService.makeSendMessageWithText(update, msg);
+        return sendMessageService.makeSendMessageWithText(message, msg);
     }
 
-    public SendMessage processCommandTimetable(Update update) {
+    public SendMessage processCommandTimetable(Message message) {
 
-        return sendMessageService.makeSendMessageWithText(update, messageService.getTimetableMessage());
+        return sendMessageService.makeSendMessageWithText(message, messageService.getTimetableMessage());
     }
 
-    public SendMessage processCommandToday(Update update) {
+    public SendMessage processCommandToday(Message message) {
 
         var dateTime = scheduleDateTimeParser.getScheduleDateTime();
         var schedule = scheduleParser.getSchedule();
 
         var msg = messageService.makeScheduleDayMessageByScheduleDateTime(schedule, dateTime);
 
-        return sendMessageService.makeSendMessageWithText(update, msg);
+        return sendMessageService.makeSendMessageWithText(message, msg);
     }
 
-    public SendMessage processCommandNextDay(Update update) {
+    public SendMessage processCommandNextDay(Message message) {
 
         var dateTime = scheduleDateTimeParser.getScheduleDateTime();
         var schedule = scheduleParser.getSchedule();
@@ -79,10 +79,10 @@ public class ProcessCommandService {
                 dateTime.getNextWorkScheduleDateTime()
         );
 
-        return sendMessageService.makeSendMessageWithText(update, msg);
+        return sendMessageService.makeSendMessageWithText(message, msg);
     }
 
-    public SendMessage processCommandCurrentWeek(Update update) {
+    public SendMessage processCommandCurrentWeek(Message message) {
 
         var dateTime = scheduleDateTimeParser.getScheduleDateTime();
         var schedule = scheduleParser.getSchedule();
@@ -91,10 +91,10 @@ public class ProcessCommandService {
                 schedule, dateTime.getWeekName()
         );
 
-        return sendMessageService.makeSendMessageWithText(update, msg);
+        return sendMessageService.makeSendMessageWithText(message, msg);
     }
 
-    public SendMessage processCommandNextWeek(Update update) {
+    public SendMessage processCommandNextWeek(Message message) {
 
         var dateTime = scheduleDateTimeParser.getScheduleDateTime();
         var schedule = scheduleParser.getSchedule();
@@ -103,11 +103,11 @@ public class ProcessCommandService {
                 schedule, dateTime.getWeekName().getNextWeek()
         );
 
-        return sendMessageService.makeSendMessageWithText(update, msg);
+        return sendMessageService.makeSendMessageWithText(message, msg);
     }
 
-    public SendMessage processCommandHelp(Update update) {
+    public SendMessage processCommandHelp(Message message) {
 
-        return sendMessageService.makeSendMessageWithText(update, messageService.getHelpMessage());
+        return sendMessageService.makeSendMessageWithText(message, messageService.getHelpMessage());
     }
 }

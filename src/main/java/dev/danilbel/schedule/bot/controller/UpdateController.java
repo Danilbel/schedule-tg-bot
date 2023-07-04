@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import org.springframework.stereotype.Controller;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @RequiredArgsConstructor
@@ -28,32 +29,40 @@ public class UpdateController {
 
     public void processUpdate(Update update) {
 
-        if (update != null && update.hasMessage() && update.getMessage().hasText()) {
+        if (update != null && update.hasMessage()) {
 
-            var textMessage = update.getMessage().getText();
+            processMessage(update.getMessage());
+        }
+    }
+
+    private void processMessage(Message message) {
+
+        if (message.hasText()) {
+
+            var textMessage = message.getText();
             var command = textMessage.trim().split(" ")[0];
 
             if (commandService.getAllCommandList().contains(command)) {
                 processCommandMessage(
-                        update,
+                        message,
                         commandService.fromCommandName(command)
                 );
             }
         }
     }
 
-    private void processCommandMessage(Update update, Command command) {
+    private void processCommandMessage(Message message, Command command) {
         var sendMessage = switch (command) {
-            case START -> processCommandService.processCommandStart(update);
-            case CURRENT -> processCommandService.processCommandCurrent(update);
-            case NEXT -> processCommandService.processCommandNext(update);
-            case LAST -> processCommandService.processCommandLast(update);
-            case TIMETABLE -> processCommandService.processCommandTimetable(update);
-            case TODAY -> processCommandService.processCommandToday(update);
-            case NEXT_DAY -> processCommandService.processCommandNextDay(update);
-            case CURRENT_WEEK -> processCommandService.processCommandCurrentWeek(update);
-            case NEXT_WEEK -> processCommandService.processCommandNextWeek(update);
-            case HELP -> processCommandService.processCommandHelp(update);
+            case START -> processCommandService.processCommandStart(message);
+            case CURRENT -> processCommandService.processCommandCurrent(message);
+            case NEXT -> processCommandService.processCommandNext(message);
+            case LAST -> processCommandService.processCommandLast(message);
+            case TIMETABLE -> processCommandService.processCommandTimetable(message);
+            case TODAY -> processCommandService.processCommandToday(message);
+            case NEXT_DAY -> processCommandService.processCommandNextDay(message);
+            case CURRENT_WEEK -> processCommandService.processCommandCurrentWeek(message);
+            case NEXT_WEEK -> processCommandService.processCommandNextWeek(message);
+            case HELP -> processCommandService.processCommandHelp(message);
         };
 
         setView(sendMessage);
