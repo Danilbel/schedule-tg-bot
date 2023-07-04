@@ -10,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 public enum Command {
 
     START("/start", "Почати роботу"),
+    BIND("/bind", "<name> Обрати групу"),
     CURRENT("/current", "Поточна пара"),
     NEXT("/next", "Наступна пара"),
     LAST("/last", "Залишок часу до кінця пари/перерви"),

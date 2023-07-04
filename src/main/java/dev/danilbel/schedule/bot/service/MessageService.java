@@ -31,6 +31,7 @@ public class MessageService {
                 Які пари на поточний та наступний тиждень, на сьогодні та наступний робочий день. Яка пара зараз та яка наступна. Скільки часу залишилось до кінця пари або перерви. Це все я дізнаюсь з сайту <a href="https://schedule.kpi.ua/">розкладу КПІ</a> та надам тобі відповідь.
 
                 – Користуйся мною у особистих повідомленнях або додай до чату групи.
+                – Прив'яжи групу до чату командою: /bind <i>шифр групи</i>
                 – Дізнайся про всі команди бота: /help
 
                 <i>v1.0.0 (beta)
@@ -39,7 +40,7 @@ public class MessageService {
                 """;
     }
 
-    public String makeCurrentPairMessageByScheduleDateTime(Schedule schedule, ScheduleDateTime scheduleDateTime) {
+    public String makeCurrentPairMessageByScheduleDateTime(Schedule schedule, ScheduleDateTime scheduleDateTime, String groupName) {
 
         var day = scheduleWeekService.getSortedScheduleDayOrNullByDayOfWeek(
                 schedule,
@@ -47,7 +48,7 @@ public class MessageService {
                 scheduleDateTime.getDayOfWeek()
         );
 
-        var check = checkDayOfWeekAndPairs(scheduleDateTime.getDayOfWeek(), day);
+        var check = checkDayOfWeekAndPairs(scheduleDateTime.getDayOfWeek(), day, groupName);
 
         if (check != null) return check;
 
@@ -61,10 +62,10 @@ public class MessageService {
 
                 if (scheduleDateTime.getTime().isBefore(TimeTable.FIRST_PAIR.getLocalTimeOfStartTime())) {
 
-                    msg = "<b>Пари ще не почалися!</b>\n\n";
+                    msg = "<b>"+ groupName +", пари ще не почалися!</b>\n\n";
                 } else {
 
-                    msg = "<b>Зараз перерва!</b>\n\n";
+                    msg = "<b>"+ groupName +", зараз перерва!</b>\n\n";
                 }
 
                 var remainingTime = getRemainingTime(scheduleDateTime, timePair.getLocalTimeOfStartTime());
@@ -77,17 +78,17 @@ public class MessageService {
 
             } else if (scheduleDateTime.getTime().isBefore(timePair.getLocalTimeOfEndTime())) {
 
-                var msg = "<b>Зараз пара:</b>\n\n";
+                var msg = "<b>"+ groupName +", зараз пара:</b>\n\n";
                 msg += scheduleDayService.pairsByTimeToString(day, timePair);
 
                 return msg;
             }
         }
 
-        return "<i>Пари вже закінчилися!</i>";
+        return "<i>"+ groupName +", пари вже закінчилися!</i>";
     }
 
-    private String checkDayOfWeekAndPairs(DayOfWeek dayOfWeek, ScheduleDay scheduleDay) {
+    private String checkDayOfWeekAndPairs(DayOfWeek dayOfWeek, ScheduleDay scheduleDay, String groupName) {
 
         if (dayOfWeek == DayOfWeek.SUNDAY) {
 
@@ -96,7 +97,7 @@ public class MessageService {
 
         if (scheduleDay == null || scheduleDay.getPairs().isEmpty()) {
 
-            return "<i>Сьогодні пар немає!</i>";
+            return "<i>"+ groupName +", сьогодні пар немає!</i>";
         }
 
         return null;
@@ -109,7 +110,7 @@ public class MessageService {
                 .minusMinutes(scheduleDateTime.getTime().getMinute());
     }
 
-    public String makeNextPairMessageByScheduleDateTime(Schedule schedule, ScheduleDateTime scheduleDateTime) {
+    public String makeNextPairMessageByScheduleDateTime(Schedule schedule, ScheduleDateTime scheduleDateTime, String groupName) {
 
         var day = scheduleWeekService.getSortedScheduleDayOrNullByDayOfWeek(
                 schedule,
@@ -117,7 +118,7 @@ public class MessageService {
                 scheduleDateTime.getDayOfWeek()
         );
 
-        var check = checkDayOfWeekAndPairs(scheduleDateTime.getDayOfWeek(), day);
+        var check = checkDayOfWeekAndPairs(scheduleDateTime.getDayOfWeek(), day, groupName);
 
         if (check != null) return check;
 
@@ -129,7 +130,8 @@ public class MessageService {
 
                 var remainingTime = getRemainingTime(scheduleDateTime, timePair.getLocalTimeOfStartTime());
 
-                var msg = String.format("Наступна пара через <i>%d год. %d хв.</i>\n",
+                var msg = String.format("%s, наступна пара через <i>%d год. %d хв.</i>\n",
+                        groupName,
                         remainingTime.getHour(), remainingTime.getMinute());
                 msg += scheduleDayService.pairsByTimeToString(day, timePair);
 
@@ -137,10 +139,10 @@ public class MessageService {
             }
         }
 
-        return "<i>Пар більше немає!</i>";
+        return "<i>"+ groupName +", пар більше немає!</i>";
     }
 
-    public String makeRemainingTimeMessageByScheduleDateTime(Schedule schedule, ScheduleDateTime scheduleDateTime) {
+    public String makeRemainingTimeMessageByScheduleDateTime(Schedule schedule, ScheduleDateTime scheduleDateTime, String groupName) {
 
         var day = scheduleWeekService.getSortedScheduleDayOrNullByDayOfWeek(
                 schedule,
@@ -148,7 +150,7 @@ public class MessageService {
                 scheduleDateTime.getDayOfWeek()
         );
 
-        var check = checkDayOfWeekAndPairs(scheduleDateTime.getDayOfWeek(), day);
+        var check = checkDayOfWeekAndPairs(scheduleDateTime.getDayOfWeek(), day, groupName);
 
         if (check != null) return check;
 
@@ -159,8 +161,8 @@ public class MessageService {
             if (scheduleDateTime.getTime().isBefore(timePair.getLocalTimeOfStartTime())) {
 
                 var msg = scheduleDateTime.getTime().isBefore(TimeTable.FIRST_PAIR.getLocalTimeOfStartTime())
-                        ? "<b>Пари ще не почалися, до наступної пари залишилося:</b>\n\n"
-                        : "<b>До кінця перерви залишилося:</b>\n\n";
+                        ? "<b>"+ groupName +", пари ще не почалися, до наступної пари залишилося:</b>\n\n"
+                        : "<b>"+ groupName +", до кінця перерви залишилося:</b>\n\n";
 
                 var remainingTime = getRemainingTime(scheduleDateTime, timePair.getLocalTimeOfStartTime());
 
@@ -172,12 +174,13 @@ public class MessageService {
 
                 var remainingTime = getRemainingTime(scheduleDateTime, timePair.getLocalTimeOfEndTime());
 
-                return String.format("<b>До кінця пари залишилося:</b>\n\n<i>%d год. %d хв. %d сек.</i>",
+                return String.format("<b>%s, до кінця пари залишилося:</b>\n\n<i>%d год. %d хв. %d сек.</i>",
+                        groupName,
                         remainingTime.getHour(), remainingTime.getMinute(), remainingTime.getSecond());
             }
         }
 
-        return "<i>Пари вже закінчилися!</i>";
+        return "<i>"+ groupName +", пари вже закінчилися!</i>";
     }
 
     public String getTimetableMessage() {
@@ -191,7 +194,7 @@ public class MessageService {
         return msg.toString();
     }
 
-    public String makeScheduleDayMessageByScheduleDateTime(Schedule schedule, ScheduleDateTime scheduleDateTime) {
+    public String makeScheduleDayMessageByScheduleDateTime(Schedule schedule, ScheduleDateTime scheduleDateTime, String groupName) {
 
         if (scheduleDateTime.getDayOfWeek() == DayOfWeek.SUNDAY) {
 
@@ -204,7 +207,8 @@ public class MessageService {
                 scheduleDateTime.getDayOfWeek()
         );
 
-        var msg = String.format("<b>Пари на %s (%02d.%02d):</b>\n\n",
+        var msg = String.format("<b>%s, пари на %s (%02d.%02d):</b>\n\n",
+                groupName,
                 scheduleDateTime.getDayOfWeek().getFullNameDay().toLowerCase(),
                 scheduleDateTime.getDate().getDayOfMonth(),
                 scheduleDateTime.getDate().getMonthValue());
@@ -212,15 +216,16 @@ public class MessageService {
         if (scheduleDay != null) {
             msg += scheduleDayService.scheduleDayToString(scheduleDay);
         } else {
-            msg += "<i>На цей день пар немає!</i>";
+            msg += "<i>"+ groupName +", на цей день пар немає!</i>";
         }
 
         return msg;
     }
 
-    public String makeScheduleWeekMessageByWeekName(Schedule schedule, WeekName weekName) {
+    public String makeScheduleWeekMessageByWeekName(Schedule schedule, WeekName weekName, String groupName) {
 
-        var msg = String.format("<b>Пари на %s тиждень:</b>\n\n",
+        var msg = String.format("<b>%s, пари на %s тиждень:</b>\n\n",
+                groupName,
                 weekName.getNameWeek().toLowerCase());
 
         msg += scheduleWeekService.scheduleWeekByWeekNameToString(schedule, weekName);
@@ -234,6 +239,8 @@ public class MessageService {
                 <b>Команди бота:</b>
                                 
                 /start – почати роботу з ботом
+                
+                /bind <i>назва групи</i> – обрати групу
                                 
                 /current – поточна пара
                 /next – наступна пара

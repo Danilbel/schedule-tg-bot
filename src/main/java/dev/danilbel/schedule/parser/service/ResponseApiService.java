@@ -1,6 +1,5 @@
 package dev.danilbel.schedule.parser.service;
 
-import dev.danilbel.schedule.parser.config.ParserConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
@@ -20,14 +19,12 @@ public class ResponseApiService {
     public static final String URL_API_SCHEDULE = "https://schedule.kpi.ua/api/schedule/lessons?groupId=";
     public static final String URL_API_GROUP = "https://schedule.kpi.ua/api/schedule/groups";
 
-    ParserConfig parserConfig;
-
     public String getResponseApiDateTime() {
         return getResponse(URL_API_DATETIME);
     }
 
-    public String getResponseApiSchedule() {
-        return getResponse(URL_API_SCHEDULE + parserConfig.getScheduleGroupId());
+    public String getResponseApiSchedule(String groupId) {
+        return getResponse(URL_API_SCHEDULE + groupId);
     }
 
     public String getResponseApiGroups() {

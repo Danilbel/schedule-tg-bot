@@ -4,6 +4,7 @@ import dev.danilbel.schedule.bot.TelegramBot;
 import dev.danilbel.schedule.bot.enums.Command;
 import dev.danilbel.schedule.bot.service.CommandService;
 import dev.danilbel.schedule.bot.service.ProcessCommandService;
+import dev.danilbel.schedule.bot.service.SendMessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
@@ -22,6 +23,7 @@ public class UpdateController {
 
     CommandService commandService;
     ProcessCommandService processCommandService;
+    SendMessageService sendMessageService;
 
     public void registerBot(TelegramBot telegramBot) {
         this.telegramBot = telegramBot;
@@ -52,20 +54,27 @@ public class UpdateController {
     }
 
     private void processCommandMessage(Message message, Command command) {
-        var sendMessage = switch (command) {
-            case START -> processCommandService.processCommandStart(message);
-            case CURRENT -> processCommandService.processCommandCurrent(message);
-            case NEXT -> processCommandService.processCommandNext(message);
-            case LAST -> processCommandService.processCommandLast(message);
-            case TIMETABLE -> processCommandService.processCommandTimetable(message);
-            case TODAY -> processCommandService.processCommandToday(message);
-            case NEXT_DAY -> processCommandService.processCommandNextDay(message);
-            case CURRENT_WEEK -> processCommandService.processCommandCurrentWeek(message);
-            case NEXT_WEEK -> processCommandService.processCommandNextWeek(message);
-            case HELP -> processCommandService.processCommandHelp(message);
-        };
 
-        setView(sendMessage);
+        try {
+            var sendMessage = switch (command) {
+                case START -> processCommandService.processCommandStart(message);
+                case BIND -> processCommandService.processCommandBind(message);
+                case CURRENT -> processCommandService.processCommandCurrent(message);
+                case NEXT -> processCommandService.processCommandNext(message);
+                case LAST -> processCommandService.processCommandLast(message);
+                case TIMETABLE -> processCommandService.processCommandTimetable(message);
+                case TODAY -> processCommandService.processCommandToday(message);
+                case NEXT_DAY -> processCommandService.processCommandNextDay(message);
+                case CURRENT_WEEK -> processCommandService.processCommandCurrentWeek(message);
+                case NEXT_WEEK -> processCommandService.processCommandNextWeek(message);
+                case HELP -> processCommandService.processCommandHelp(message);
+            };
+
+            setView(sendMessage);
+        } catch (IllegalArgumentException e) {
+            var sendMessage = sendMessageService.makeSendMessageWithText(message, e.getMessage());
+            setView(sendMessage);
+        }
     }
 
     private void setView(SendMessage sendMessage) {

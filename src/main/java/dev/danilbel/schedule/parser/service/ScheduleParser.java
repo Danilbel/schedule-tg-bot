@@ -26,9 +26,9 @@ public class ScheduleParser {
     DayOfWeekAdapter dayOfWeekAdapter;
     TimeTableAdapter timeTableAdapter;
 
-    public Schedule getSchedule() {
+    public Schedule getSchedule(String groupId) {
 
-        var json = responseApiService.getResponseApiSchedule();
+        var json = responseApiService.getResponseApiSchedule(groupId);
 
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(DayOfWeek.class, dayOfWeekAdapter)
