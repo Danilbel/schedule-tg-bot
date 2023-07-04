@@ -18,6 +18,7 @@ public class ResponseApiService {
 
     public static final String URL_API_DATETIME = "https://worldtimeapi.org/api/timezone/Europe/Kyiv";
     public static final String URL_API_SCHEDULE = "https://schedule.kpi.ua/api/schedule/lessons?groupId=";
+    public static final String URL_API_GROUP = "https://schedule.kpi.ua/api/schedule/groups";
 
     ParserConfig parserConfig;
 
@@ -27,6 +28,10 @@ public class ResponseApiService {
 
     public String getResponseApiSchedule() {
         return getResponse(URL_API_SCHEDULE + parserConfig.getScheduleGroupId());
+    }
+
+    public String getResponseApiGroups() {
+        return getResponse(URL_API_GROUP);
     }
 
     private String getResponse(String url) {
