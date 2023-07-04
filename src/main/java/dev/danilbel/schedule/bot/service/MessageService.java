@@ -67,7 +67,7 @@ public class MessageService {
                     msg = "<b>Зараз перерва!</b>\n\n";
                 }
 
-                var remainingTime = getRemainingTime(scheduleDateTime, timePair);
+                var remainingTime = getRemainingTime(scheduleDateTime, timePair.getLocalTimeOfStartTime());
 
                 msg += String.format("Наступна пара через <i>%d год. %d хв.</i>\n",
                         remainingTime.getHour(), remainingTime.getMinute());
@@ -102,9 +102,9 @@ public class MessageService {
         return null;
     }
 
-    private LocalTime getRemainingTime(ScheduleDateTime scheduleDateTime, TimeTable timePair) {
+    private LocalTime getRemainingTime(ScheduleDateTime scheduleDateTime, LocalTime timeOfPair) {
 
-        return timePair.getLocalTimeOfStartTime()
+        return timeOfPair
                 .minusHours(scheduleDateTime.getTime().getHour())
                 .minusMinutes(scheduleDateTime.getTime().getMinute());
     }
@@ -127,7 +127,7 @@ public class MessageService {
 
             if (scheduleDateTime.getTime().isBefore(timePair.getLocalTimeOfStartTime())) {
 
-                var remainingTime = getRemainingTime(scheduleDateTime, timePair);
+                var remainingTime = getRemainingTime(scheduleDateTime, timePair.getLocalTimeOfStartTime());
 
                 var msg = String.format("Наступна пара через <i>%d год. %d хв.</i>\n",
                         remainingTime.getHour(), remainingTime.getMinute());
@@ -162,7 +162,7 @@ public class MessageService {
                         ? "<b>Пари ще не почалися, до наступної пари залишилося:</b>\n\n"
                         : "<b>До кінця перерви залишилося:</b>\n\n";
 
-                var remainingTime = getRemainingTime(scheduleDateTime, timePair);
+                var remainingTime = getRemainingTime(scheduleDateTime, timePair.getLocalTimeOfStartTime());
 
                 msg += String.format("<i>%d год. %d хв. %d сек.</i>",
                         remainingTime.getHour(), remainingTime.getMinute(), remainingTime.getSecond());
@@ -170,7 +170,7 @@ public class MessageService {
                 return msg;
             } else if (scheduleDateTime.getTime().isBefore(timePair.getLocalTimeOfEndTime())) {
 
-                var remainingTime = getRemainingTime(scheduleDateTime, timePair);
+                var remainingTime = getRemainingTime(scheduleDateTime, timePair.getLocalTimeOfEndTime());
 
                 return String.format("<b>До кінця пари залишилося:</b>\n\n<i>%d год. %d хв. %d сек.</i>",
                         remainingTime.getHour(), remainingTime.getMinute(), remainingTime.getSecond());
